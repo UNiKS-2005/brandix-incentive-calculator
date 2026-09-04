@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Settings</title>
+
+    <script>
+        if (localStorage.getItem('brandixTheme') === 'dark') {
+            document.documentElement.classList.add('dark-theme');
+        }
+    </script>
+
+    <style>
+        /* Original default sizes */
+        body { font-family: 'Segoe UI', Arial, sans-serif; background-color: #f4f7f6; padding: 20px; margin: 0; display: flex; justify-content: center; align-items: flex-start; min-height: 100vh; box-sizing: border-box; transition: background-color 0.3s; }
+        .container { background-color: #fff; padding: 25px; border-radius: 12px; box-shadow: 0 10px 25px rgba(0,0,0,0.08); width: 100%; max-width: 450px; margin: 20px auto; transition: background-color 0.3s, box-shadow 0.3s; }
+        
+        .settings-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
+        
+        /* Button themes */
+        .theme-btn { 
+            background: #f1f5f9; 
+            border: none; 
+            padding: 8px 16px; 
+            border-radius: 20px; 
+            cursor: pointer; 
+            font-weight: 600; 
+            font-size: 13px; 
+            color: #334155;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+            transition: all 0.2s ease; 
+        }
+        .theme-btn:hover { background: #e2e8f0; transform: translateY(-1px); box-shadow: 0 4px 8px rgba(0,0,0,0.1); }
+        .theme-btn:active { transform: translateY(0); box-shadow: 0 1px 3px rgba(0,0,0,0.05); }
+        
+        h2 { text-align: center; color: #c0113f; margin-top: 0; font-size: 22px; font-weight: 700; letter-spacing: -0.5px;}
+        .settings-section { background: #f8fafc; padding: 15px; border-radius: 8px; margin-bottom: 15px; border: 1px solid #e2e8f0; transition: background-color 0.3s, border-color 0.3s;}
+        .settings-section h3 { margin-top: 0; font-size: 16px; color: #c0113f; border-bottom: 1px solid #e2e8f0; padding-bottom: 8px; margin-bottom: 12px; }
+        .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+        .grid-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 8px; align-items: center; }
+        .grid-3 label { margin: 0; font-size: 12px; font-weight: 600; color: #64748b;}
+        label { display: block; margin-bottom: 5px; font-size: 13px; color: #334155; font-weight: 600;}
+        input { width: 100%; padding: 10px; border: 1px solid #cbd5e1; border-radius: 6px; box-sizing: border-box; transition: all 0.3s ease; outline: none; background-color: #fff;}
+        input:focus { border-color: #c0113f; box-shadow: 0 0 0 3px rgba(192, 17, 63, 0.1); }
+        
+        /* New Action buttons */
+        .action-btn { 
+            width: 100%; 
+            padding: 14px; 
+            border: none; 
+            border-radius: 8px; 
+            font-size: 16px; 
+            font-weight: 600; 
+            cursor: pointer; 
+            margin-top: 12px; 
+            letter-spacing: 0.5px;
+            transition: all 0.2s ease-in-out; 
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            text-decoration: none;
+            box-sizing: border-box;
+        }
+        
+        .primary-btn { 
+            background: linear-gradient(135deg, #c0113f 0%, #d81b4b 100%); 
+            color: white; 
+            box-shadow: 0 4px 12px rgba(192, 17, 63, 0.25);
+        }
+        .primary-btn:hover { background: linear-gradient(135deg, #d81b4b 0%, #e62356 100%); transform: translateY(-2px); box-shadow: 0 6px 16px rgba(192, 17, 63, 0.35); }
+        .primary-btn:active { transform: translateY(1px); box-shadow: 0 2px 6px rgba(192, 17, 63, 0.2); }
+        
+        .secondary-btn { 
+            background: linear-gradient(135deg, #64748b 0%, #475569 100%); 
+            color: white; 
+            box-shadow: 0 4px 12px rgba(71, 85, 105, 0.2);
+        }
+        .secondary-btn:hover { background: linear-gradient(135deg, #718096 0%, #4a5568 100%); transform: translateY(-2px); box-shadow: 0 6px 16px rgba(71, 85, 105, 0.3); }
+        .secondary-btn:active { transform: translateY(1px); box-shadow: 0 2px 6px rgba(71, 85, 105, 0.2); }
+
+        /* enlarge sizes */
+        @media (min-width: 700px) {
+            .container { max-width: 900px; padding: 40px; border-radius: 16px; }
+            h2 { font-size: 32px; margin-bottom: 25px; }
+            .theme-btn { font-size: 15px; padding: 10px 18px; }
+            .settings-section { padding: 25px; margin-bottom: 25px; border-radius: 12px; }
+            .settings-section h3 { font-size: 20px; margin-bottom: 18px; padding-bottom: 12px; }
+            label { font-size: 15px; }
+            .grid-3 label { font-size: 14px; }
+            input { padding: 12px; font-size: 18px; }
+            .action-btn { padding: 16px; font-size: 18px; margin-top: 15px; border-radius: 10px; }
+        }
+
+        /* Dark theme overrides */
+        html.dark-theme body { background-color: #0f172a; }
+        html.dark-theme .container { background-color: #1e293b; box-shadow: 0 10px 30px rgba(0,0,0,0.5); }
+        html.dark-theme h2, html.dark-theme .settings-section h3 { color: #fb7185; border-color: #334155; }
+        html.dark-theme .settings-section { background-color: #0f172a; border-color: #334155; }
+        html.dark-theme label, html.dark-theme .grid-3 label { color: #e2e8f0; }
+        html.dark-theme input { background-color: #1e293b; border: 1px solid #475569; color: #f8fafc; }
+        html.dark-theme input:focus { border-color: #fb7185; box-shadow: 0 0 0 3px rgba(251, 113, 133, 0.15); }
+        
+        html.dark-theme .theme-btn { background: #334155; color: #f8fafc; box-shadow: 0 2px 6px rgba(0,0,0,0.2); }
+        html.dark-theme .theme-btn:hover { background: #475569; }
+    </style>
+</head>
+<body onload="loadSettings()">
+
+<div class="container">
+    <div class="settings-header">
+        <h2>Configuration Settings</h2>
+        <button class="theme-btn" onclick="toggleTheme()" title="Switch Light/Dark Theme">Theme</button>
+    </div>
+    
+    <div class="settings-section">
+        <h3>General Rules</h3>
+        <div class="grid-2">
+            <div><label>Max Cap (Rs.)</label><input type="number" id="set_maxCap"></div>
+            <div><label>Shortfall Pen. (Rs.)</label><input type="number" id="set_shortfall"></div>
+            <div><label>AQL 1 Pen. (%)</label><input type="number" id="set_aql1"></div>
+            <div><label>AQL 2 Pen. (%)</label><input type="number" id="set_aql2"></div>
+        </div>
+    </div>
+
+    <div class="settings-section">
+        <h3>Base Payments</h3>
+        <div class="grid-2">
+            <div><label>10% - 59%: (Rs.)</label><input type="number" id="set_base_60"></div>
+            <div><label>60% - 64%: (Rs.)</label><input type="number" id="set_base_65"></div>
+            <div><label>65% - 69%: (Rs.)</label><input type="number" id="set_base_70"></div>
+            <div><label>70% - 74%: (Rs.)</label><input type="number" id="set_base_75"></div>
+            <div><label>75% - 79%: (Rs.)</label><input type="number" id="set_base_80"></div>
+            <div><label>80% - 84%: (Rs.)</label><input type="number" id="set_base_85"></div>
+            <div><label>85% - 89%: (Rs.)</label><input type="number" id="set_base_90"></div>
+            <div><label>90%+ :  (Rs.)</label><input type="number" id="set_base_max"></div>
+        </div>
+    </div>
+
+    <div class="settings-section">
+        <h3>Extra Unit Rates</h3>
+        <div class="grid-3">
+            <label>Efficiency</label><label>First 5 Units (Rs.)</label><label>After 5 (Rs.)</label>
+            <label><= 30%</label><input type="number" id="set_ex_30_f"><input type="number" id="set_ex_30_a">
+            <label>31% - 45%</label><input type="number" id="set_ex_45_f"><input type="number" id="set_ex_45_a">
+            <label>46% - 60%</label><input type="number" id="set_ex_60_f"><input type="number" id="set_ex_60_a">
+            <label>61% - 75%</label><input type="number" id="set_ex_75_f"><input type="number" id="set_ex_75_a">
+            <label>76% - 90%</label><input type="number" id="set_ex_90_f"><input type="number" id="set_ex_90_a">
+            <label>> 90% (All)</label><input type="number" id="set_ex_max"><div></div>
+        </div>
+    </div>
+
+    <button class="action-btn primary-btn" onclick="saveSettings()">Save Configuration</button>
+    <a href="calculator.html" class="action-btn secondary-btn">Return to Calculator</a>
+</div>
+
+<script>
+    function toggleTheme() {
+        const docEl = document.documentElement; docEl.classList.toggle('dark-theme');
+        if (docEl.classList.contains('dark-theme')) { localStorage.setItem('brandixTheme', 'dark'); } 
+        else { localStorage.setItem('brandixTheme', 'light'); }
+    }
+
+    const defaultConfig = { maxCap: 1000, shortfallPenalty: 15, aqlPenalties: { 1: 0.10, 2: 0.20, 3: 1.00 }, baseRates: { 60: 300, 65: 400, 70: 450, 75: 475, 80: 500, 85: 525, 90: 550, max: 600 }, extraRates: { 30: { first5: 20, after5: 25 }, 45: { first5: 25, after5: 30 }, 60: { first5: 30, after5: 35 }, 75: { first5: 35, after5: 40 }, 90: { first5: 40, after5: 45 }, max: 50 } };
+    let config = JSON.parse(localStorage.getItem('brandixConfig')) || defaultConfig;
+
+    function loadSettings() {
+        document.getElementById('set_maxCap').value = config.maxCap; document.getElementById('set_shortfall').value = config.shortfallPenalty; document.getElementById('set_aql1').value = config.aqlPenalties[1] * 100; document.getElementById('set_aql2').value = config.aqlPenalties[2] * 100;
+        document.getElementById('set_base_60').value = config.baseRates[60]; document.getElementById('set_base_65').value = config.baseRates[65]; document.getElementById('set_base_70').value = config.baseRates[70]; document.getElementById('set_base_75').value = config.baseRates[75]; document.getElementById('set_base_80').value = config.baseRates[80]; document.getElementById('set_base_85').value = config.baseRates[85]; document.getElementById('set_base_90').value = config.baseRates[90]; document.getElementById('set_base_max').value = config.baseRates.max;
+        document.getElementById('set_ex_30_f').value = config.extraRates[30].first5; document.getElementById('set_ex_30_a').value = config.extraRates[30].after5; document.getElementById('set_ex_45_f').value = config.extraRates[45].first5; document.getElementById('set_ex_45_a').value = config.extraRates[45].after5; document.getElementById('set_ex_60_f').value = config.extraRates[60].first5; document.getElementById('set_ex_60_a').value = config.extraRates[60].after5; document.getElementById('set_ex_75_f').value = config.extraRates[75].first5; document.getElementById('set_ex_75_a').value = config.extraRates[75].after5; document.getElementById('set_ex_90_f').value = config.extraRates[90].first5; document.getElementById('set_ex_90_a').value = config.extraRates[90].after5; document.getElementById('set_ex_max').value = config.extraRates.max;
+    }
+
+    function saveSettings() {
+        config.maxCap = parseFloat(document.getElementById('set_maxCap').value) || 0; config.shortfallPenalty = parseFloat(document.getElementById('set_shortfall').value) || 0; config.aqlPenalties[1] = (parseFloat(document.getElementById('set_aql1').value) || 0) / 100; config.aqlPenalties[2] = (parseFloat(document.getElementById('set_aql2').value) || 0) / 100;
+        config.baseRates[60] = parseFloat(document.getElementById('set_base_60').value) || 0; config.baseRates[65] = parseFloat(document.getElementById('set_base_65').value) || 0; config.baseRates[70] = parseFloat(document.getElementById('set_base_70').value) || 0; config.baseRates[75] = parseFloat(document.getElementById('set_base_75').value) || 0; config.baseRates[80] = parseFloat(document.getElementById('set_base_80').value) || 0; config.baseRates[85] = parseFloat(document.getElementById('set_base_85').value) || 0; config.baseRates[90] = parseFloat(document.getElementById('set_base_90').value) || 0; config.baseRates.max = parseFloat(document.getElementById('set_base_max').value) || 0;
+        config.extraRates[30].first5 = parseFloat(document.getElementById('set_ex_30_f').value) || 0; config.extraRates[30].after5 = parseFloat(document.getElementById('set_ex_30_a').value) || 0; config.extraRates[45].first5 = parseFloat(document.getElementById('set_ex_45_f').value) || 0; config.extraRates[45].after5 = parseFloat(document.getElementById('set_ex_45_a').value) || 0; config.extraRates[60].first5 = parseFloat(document.getElementById('set_ex_60_f').value) || 0; config.extraRates[60].after5 = parseFloat(document.getElementById('set_ex_60_a').value) || 0; config.extraRates[75].first5 = parseFloat(document.getElementById('set_ex_75_f').value) || 0; config.extraRates[75].after5 = parseFloat(document.getElementById('set_ex_75_a').value) || 0; config.extraRates[90].first5 = parseFloat(document.getElementById('set_ex_90_f').value) || 0; config.extraRates[90].after5 = parseFloat(document.getElementById('set_ex_90_a').value) || 0; config.extraRates.max = parseFloat(document.getElementById('set_ex_max').value) || 0;
+        
+        localStorage.setItem('brandixConfig', JSON.stringify(config));
+        window.location.href = 'calculator.html';
+    }
+</script>
+</body>
+</html>

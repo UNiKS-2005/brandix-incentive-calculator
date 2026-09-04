@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Incentive Calculator</title>
+    
+    <script>
+        if (localStorage.getItem('brandixTheme') === 'dark') {
+            document.documentElement.classList.add('dark-theme');
+        }
+    </script>
+
+    <style>
+        /* Original default sizes */
+        body { font-family: 'Segoe UI', Arial, sans-serif; background-color: #f4f7f6; padding: 20px; margin: 0; display: flex; justify-content: center; align-items: center; min-height: 100vh; box-sizing: border-box; transition: background-color 0.3s; }
+        .container { background-color: #fff; padding: 25px; border-radius: 12px; box-shadow: 0 10px 25px rgba(0,0,0,0.08); width: 100%; max-width: 450px; position: relative; transition: background-color 0.3s, box-shadow 0.3s; }
+        
+        .top-bar { display: flex; justify-content: space-between; align-items: center; margin-bottom: 5px; }
+        .brand-logo { height: 40px; width: auto; border-radius: 4px; }
+        
+        /* Menu Styles */
+        .menu-container { position: relative; display: inline-block; }
+        .header-action { background: none; border: none; font-size: 28px; color: #64748b; cursor: pointer; transition: color 0.2s ease; padding: 0 5px; font-weight: bold;}
+        .header-action:hover { color: #c0113f; }
+        
+        .dropdown-menu { display: none; position: absolute; right: 0; top: 100%; background-color: #fff; min-width: 160px; box-shadow: 0 8px 16px rgba(0,0,0,0.15); border-radius: 8px; z-index: 10; overflow: hidden; border: 1px solid #e2e8f0; }
+        .dropdown-item { font-family: inherit; color: #334155; padding: 12px 16px; text-decoration: none; display: block; font-size: 14px; font-weight: 600; cursor: pointer; border: none; background: none; width: 100%; text-align: left; transition: background 0.2s; }
+        .dropdown-item:hover { background-color: #f1f5f9; color: #c0113f; }
+        
+        h2 { text-align: center; color: #c0113f; margin-top: 0; font-size: 24px; font-weight: 700; letter-spacing: -0.5px; }
+        .form-group { margin-bottom: 15px; }
+        label { display: block; margin-bottom: 6px; font-weight: 600; font-size: 14px; color: #334155; }
+        input, select { width: 100%; padding: 12px; border: 1px solid #cbd5e1; border-radius: 8px; box-sizing: border-box; font-size: 15px; transition: all 0.3s ease; outline: none; background-color: #f8fafc; }
+        input:focus, select:focus { border-color: #c0113f; box-shadow: 0 0 0 3px rgba(192, 17, 63, 0.15); background-color: #fff; }
+        
+        button.action-btn { width: 100%; padding: 14px; border: none; border-radius: 8px; font-size: 16px; font-weight: 600; letter-spacing: 0.5px; cursor: pointer; transition: all 0.2s ease-in-out; }
+        .primary-btn { background: linear-gradient(135deg, #c0113f 0%, #d81b4b 100%); color: white; margin-top: 15px; box-shadow: 0 4px 12px rgba(192, 17, 63, 0.25); }
+        .primary-btn:hover { background: linear-gradient(135deg, #d81b4b 0%, #e62356 100%); transform: translateY(-2px); box-shadow: 0 6px 16px rgba(192, 17, 63, 0.35); }
+        .primary-btn:active { transform: translateY(1px); box-shadow: 0 2px 6px rgba(192, 17, 63, 0.2); }
+        
+        .result { margin-top: 25px; padding: 15px; background-color: #f0fdf4; border: 1px solid #bbf7d0; border-radius: 8px; transition: background-color 0.3s; }
+        .bill-row { display: flex; justify-content: space-between; margin-bottom: 8px; font-size: 14px; color: #334155; }
+        .bill-row.total { font-size: 18px; font-weight: bold; color: #15803d; border-top: 2px solid #bbf7d0; padding-top: 12px; margin-top: 12px; }
+        .bill-row.subtotal { font-weight: bold; border-top: 1px dashed #cbd5e1; padding-top: 10px; margin-top: 10px; }
+        .deduction { color: #e11d48; }
+        .addition { color: #15803d; }
+
+        /* Enlarge sizes */
+        @media (min-width: 700px) {
+            .container { max-width: 900px; padding: 40px; border-radius: 16px; }
+            .brand-logo { height: 65px; }
+            .header-action { font-size: 32px; }
+            h2 { font-size: 32px; margin-bottom: 25px; }
+            .form-group { margin-bottom: 25px; }
+            label { font-size: 18px; margin-bottom: 8px; }
+            input, select { padding: 15px; font-size: 20px; }
+            button.action-btn { padding: 18px; font-size: 22px; margin-top: 25px; border-radius: 10px; }
+            .result { padding: 25px; margin-top: 30px; border-radius: 12px; }
+            .bill-row { font-size: 20px; margin-bottom: 12px; }
+            .bill-row.total { font-size: 26px; padding-top: 15px; margin-top: 15px; }
+        }
+
+        /* Dark theme overrides */
+        html.dark-theme { color-scheme: dark; }
+        html.dark-theme input[type="number"]::-webkit-inner-spin-button,
+        html.dark-theme input[type="number"]::-webkit-outer-spin-button { filter: invert(1) hue-rotate(180deg); opacity: 0.7; }
+        
+        html.dark-theme body { background-color: #0f172a; }
+        html.dark-theme .container { background-color: #1e293b; box-shadow: 0 10px 30px rgba(0,0,0,0.5); }
+        html.dark-theme h2 { color: #fb7185; }
+        html.dark-theme label, html.dark-theme .bill-row { color: #e2e8f0; }
+        html.dark-theme input, html.dark-theme select { background-color: #0f172a; border: 1px solid #334155; color: #f8fafc; }
+        html.dark-theme input:focus, html.dark-theme select:focus { border-color: #fb7185; box-shadow: 0 0 0 3px rgba(251, 113, 133, 0.15); }
+        html.dark-theme .header-action { color: #94a3b8; }
+        html.dark-theme .header-action:hover { color: #fb7185; }
+        html.dark-theme .result { background-color: #064e3b; border-color: #047857; }
+        html.dark-theme .bill-row.total, html.dark-theme .addition { color: #34d399; border-top-color: #047857; }
+        html.dark-theme .deduction { color: #fb7185; }
+        html.dark-theme .bill-row.subtotal { border-top-color: #475569; }
+        
+        /* Dark Theme Dropdown Elements */
+        html.dark-theme .dropdown-menu { background-color: #1e293b; border-color: #334155; }
+        html.dark-theme .dropdown-item { color: #e2e8f0; }
+        html.dark-theme .dropdown-item:hover { background-color: #0f172a; color: #fb7185; }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <div class="top-bar">
+        <img src="brandix-logo.jpg" alt="Brandix Logo" class="brand-logo">
+        
+        <div class="menu-container">
+            <button class="header-action" onclick="toggleMenu(event)" title="Menu">⋮</button>
+            <div class="dropdown-menu" id="dropdownMenu">
+                <a href="settings.html" class="dropdown-item">Configuration</a>
+                <a href="history.html" class="dropdown-item">History</a>
+            </div>
+        </div>
+    </div>
+    
+    <h2>Incentive Calculator</h2>
+
+    <div class="form-group">
+        <label for="achieved">Actual Efficiency (%)</label>
+        <input type="number" id="achieved" value="70" min="0" max="100">
+    </div>
+    
+    <div class="form-group">
+        <label for="planned">Planned Efficiency (%)</label>
+        <input type="number" id="planned" value="90" min="0" max="100">
+    </div>
+    
+    
+
+    <div class="form-group">
+        <label for="aql">Daily AQL Failures</label>
+        <select id="aql">
+            <option value="0">0</option>
+            <option value="1">1</option>
+            <option value="2">2</option>
+            <option value="3">3 or more</option>
+        </select>
+    </div>
+
+    <button class="action-btn primary-btn" onclick="calculateIncentive()">Calculate Bill</button>
+
+    <div id="resultBox" class="result" style="display: none;">
+        <div id="billSummary"></div>
+    </div>
+</div>
+
+<script>
+    // Menu
+    function toggleMenu(event) {
+        event.stopPropagation();
+        const menu = document.getElementById('dropdownMenu');
+        menu.style.display = menu.style.display === 'block' ? 'none' : 'block';
+    }
+
+    // Close menu if user clicks outside of it
+    window.onclick = function(event) {
+        if (!event.target.matches('.header-action')) {
+            const dropdowns = document.getElementsByClassName("dropdown-menu");
+            for (let i = 0; i < dropdowns.length; i++) {
+                if (dropdowns[i].style.display === 'block') dropdowns[i].style.display = 'none';
+            }
+        }
+    }
+
+    // Calculation
+    const defaultConfig = { maxCap: 1000, shortfallPenalty: 15, aqlPenalties: { 1: 0.10, 2: 0.20, 3: 1.00 }, baseRates: { 60: 300, 65: 400, 70: 450, 75: 475, 80: 500, 85: 525, 90: 550, max: 600 }, extraRates: { 30: { first5: 20, after5: 25 }, 45: { first5: 25, after5: 30 }, 60: { first5: 30, after5: 35 }, 75: { first5: 35, after5: 40 }, 90: { first5: 40, after5: 45 }, max: 50 } };
+    let config = JSON.parse(localStorage.getItem('brandixConfig')) || defaultConfig;
+
+    function getBaseIncentive(eff) { if (eff < 10) return 0; if (eff < 60) return config.baseRates[60]; if (eff < 65) return config.baseRates[65]; if (eff < 70) return config.baseRates[70]; if (eff < 75) return config.baseRates[75]; if (eff < 80) return config.baseRates[80]; if (eff < 85) return config.baseRates[85]; if (eff < 90) return config.baseRates[90]; return config.baseRates.max; }
+
+    function calculateIncentive() {
+        const planned = parseFloat(document.getElementById('planned').value) || 0; const achieved = parseFloat(document.getElementById('achieved').value) || 0; const aqlFailures = parseInt(document.getElementById('aql').value) || 0;
+        let htmlContent = ""; let basePayment = getBaseIncentive(planned);
+        htmlContent += `<div class="bill-row"><span>Base (For ${planned}% Planned):</span><span>Rs. ${basePayment.toFixed(2)}</span></div>`;
+        let subtotal = 0; let diff = achieved - planned;
+
+        if (diff < 0) {
+            if (achieved < 60) {
+                subtotal = 0;
+                htmlContent += `<div class="bill-row deduction"><span>Efficiency < 60%:</span><span>No Payment</span></div>`;
+            } else {
+                let shortfallUnits = Math.abs(diff); let deduction = shortfallUnits * config.shortfallPenalty; subtotal = Math.max(0, basePayment - deduction);
+                htmlContent += `<div class="bill-row deduction"><span>Shortfall (${shortfallUnits} units @ Rs.${config.shortfallPenalty}):</span><span>- Rs. ${deduction.toFixed(2)}</span></div>`;
+            }
+        } else if (diff > 0) {
+            let extraUnits = diff; let extraPayment = 0; let rateFirst5 = 0, rateAfter5 = 0;
+            if (planned <= 30) { rateFirst5 = config.extraRates[30].first5; rateAfter5 = config.extraRates[30].after5; } else if (planned <= 45) { rateFirst5 = config.extraRates[45].first5; rateAfter5 = config.extraRates[45].after5; } else if (planned <= 60) { rateFirst5 = config.extraRates[60].first5; rateAfter5 = config.extraRates[60].after5; } else if (planned <= 75) { rateFirst5 = config.extraRates[75].first5; rateAfter5 = config.extraRates[75].after5; } else if (planned <= 90) { rateFirst5 = config.extraRates[90].first5; rateAfter5 = config.extraRates[90].after5; }
+            if (planned > 90) { extraPayment = extraUnits * config.extraRates.max; } else { extraPayment = extraUnits <= 5 ? (extraUnits * rateFirst5) : ((5 * rateFirst5) + ((extraUnits - 5) * rateAfter5)); }
+            subtotal = basePayment + extraPayment; htmlContent += `<div class="bill-row addition"><span>Increase (${extraUnits} units extra):</span><span>+ Rs. ${extraPayment.toFixed(2)}</span></div>`;
+        } else { subtotal = basePayment; }
+
+        htmlContent += `<div class="bill-row subtotal"><span>Subtotal:</span><span>Rs. ${subtotal.toFixed(2)}</span></div>`;
+        let aqlDeduction = 0;
+        if (aqlFailures === 1) aqlDeduction = subtotal * config.aqlPenalties[1]; else if (aqlFailures === 2) aqlDeduction = subtotal * config.aqlPenalties[2]; else if (aqlFailures >= 3) aqlDeduction = subtotal * config.aqlPenalties[3]; 
+        if (aqlDeduction > 0) htmlContent += `<div class="bill-row deduction"><span>AQL Penalty (${aqlFailures} failures):</span><span>- Rs. ${aqlDeduction.toFixed(2)}</span></div>`;
+
+        let preCapTotal = subtotal - aqlDeduction; let capDeduction = 0; let finalTotal = preCapTotal;
+        if (preCapTotal > config.maxCap) { capDeduction = preCapTotal - config.maxCap; finalTotal = config.maxCap; htmlContent += `<div class="bill-row deduction"><span>Max Cap Exceeded:</span><span>- Rs. ${capDeduction.toFixed(2)}</span></div>`; }
+        htmlContent += `<div class="bill-row total"><span>FINAL PAYOUT:</span><span>Rs. ${finalTotal.toFixed(2)}</span></div>`;
+        
+        document.getElementById('billSummary').innerHTML = htmlContent; 
+        document.getElementById('resultBox').style.display = 'block';
+
+        // Save to History
+        let history = JSON.parse(localStorage.getItem('brandixHistory')) || [];
+        const record = {
+            date: new Date().toLocaleString(),
+            planned: planned,
+            achieved: achieved,
+            aql: aqlFailures,
+            payout: finalTotal.toFixed(2)
+        };
+        history.unshift(record); 
+        if (history.length > 40) history.pop(); 
+        localStorage.setItem('brandixHistory', JSON.stringify(history));
+    }
+</script>
+</body>
+</html>
