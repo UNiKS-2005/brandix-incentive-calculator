@@ -12,48 +12,80 @@
     </script>
 
     <style>
-        /* original Default size */
-        body { font-family: 'Segoe UI', Arial, sans-serif; background-color: #f4f7f6; padding: 20px; margin: 0; display: flex; justify-content: center; align-items: flex-start; min-height: 100vh; box-sizing: border-box; transition: background-color 0.3s; }
-        .container { background-color: #fff; padding: 25px; border-radius: 12px; box-shadow: 0 10px 25px rgba(0,0,0,0.08); width: 100%; max-width: 450px; margin: 20px auto; transition: background-color 0.3s, box-shadow 0.3s; display: flex; flex-direction: column; }
+        /* --- 1. LIGHT GLASS THEME (DEFAULT) --- */
+        body { 
+            font-family: 'Segoe UI', Arial, sans-serif; 
+            background: linear-gradient(135deg, #f8fafc 0%, #ffe4e6 50%, #e2e8f0 100%); 
+            background-attachment: fixed;
+            padding: 20px; margin: 0; display: flex; justify-content: center; align-items: flex-start; min-height: 100vh; box-sizing: border-box; transition: background 0.5s; 
+        }
         
-        h2 { text-align: center; color: #c0113f; margin-top: 0; font-size: 22px; font-weight: 700; letter-spacing: -0.5px; margin-bottom: 20px;}
+        .container { 
+            background: rgba(255, 255, 255, 0.4); 
+            backdrop-filter: blur(16px); 
+            -webkit-backdrop-filter: blur(16px); 
+            border: 1px solid rgba(255, 255, 255, 0.6); 
+            box-shadow: 0 10px 32px rgba(0,0,0,0.1); 
+            padding: 25px; border-radius: 12px; width: 100%; max-width: 450px; margin: 20px auto; display: flex; flex-direction: column; transition: all 0.5s; 
+        }
+        
+        h2 { text-align: center; color: #c0113f; margin-top: 0; font-size: 24px; font-weight: 700; letter-spacing: -0.5px; margin-bottom: 20px;}
         
         .history-list { overflow-y: auto; flex-grow: 1; max-height: 60vh; padding-right: 5px; margin-bottom: 20px; }
-        .history-item { background: #f8fafc; border: 1px solid #e2e8f0; padding: 12px 15px; border-radius: 8px; margin-bottom: 12px; transition: background-color 0.3s, border-color 0.3s;}
-        .history-date { font-size: 12px; color: #64748b; margin-bottom: 6px; }
-        .history-details { font-size: 14px; color: #334155; font-weight: 600; margin-bottom: 8px; }
-        .history-payout { font-size: 16px; font-weight: bold; color: #15803d; }
         
+        /* History Cards styling for glass effect */
+        .history-card { 
+            background: rgba(240, 253, 244, 0.6); 
+            border: 1px solid rgba(187, 247, 208, 0.8); 
+            border-radius: 8px; padding: 15px; margin-bottom: 12px; 
+            backdrop-filter: blur(8px); 
+        }
+        .history-date { font-size: 12px; color: #64748b; margin-bottom: 5px; border-bottom: 1px dashed rgba(203, 213, 225, 0.8); padding-bottom: 5px; }
+        .history-row { font-size: 14px; color: #334155; font-weight: 600; margin-bottom: 4px; }
+        .history-payout { font-size: 16px; font-weight: bold; color: #15803d; margin-top: 5px; text-align: right; }
+        .empty-history { text-align: center; color: #64748b; font-style: italic; padding: 20px; }
+
         /* Button styles */
-        .action-btn { width: 100%; padding: 14px; border: none; border-radius: 8px; font-size: 16px; font-weight: 600; cursor: pointer; margin-top: 10px; letter-spacing: 0.5px; transition: all 0.2s ease-in-out; display: flex; justify-content: center; align-items: center; text-decoration: none; box-sizing: border-box; }
+        .action-btn { width: 100%; padding: 14px; border: none; border-radius: 8px; font-size: 16px; font-weight: 600; cursor: pointer; margin-top: 10px; letter-spacing: 0.5px; transition: all 0.2s ease-in-out; display: flex; justify-content: center; align-items: center; text-decoration: none; box-sizing: border-box; backdrop-filter: blur(4px); }
         
-        .primary-btn { background: linear-gradient(135deg, #c0113f 0%, #d81b4b 100%); color: white; box-shadow: 0 4px 12px rgba(192, 17, 63, 0.25); }
-        .primary-btn:hover { background: linear-gradient(135deg, #d81b4b 0%, #e62356 100%); transform: translateY(-2px); box-shadow: 0 6px 16px rgba(192, 17, 63, 0.35); }
-        .primary-btn:active { transform: translateY(1px); box-shadow: 0 2px 6px rgba(192, 17, 63, 0.2); }
+        .danger-btn { background: linear-gradient(135deg, rgba(239,68,68,0.9) 0%, rgba(185,28,28,0.9) 100%); color: white; box-shadow: 0 4px 12px rgba(239, 68, 68, 0.25); }
+        .danger-btn:hover { transform: translateY(-2px); box-shadow: 0 6px 16px rgba(239, 68, 68, 0.35); filter: brightness(1.1); }
         
-        .secondary-btn { background: linear-gradient(135deg, #64748b 0%, #475569 100%); color: white; box-shadow: 0 4px 12px rgba(71, 85, 105, 0.2); }
-        .secondary-btn:hover { background: linear-gradient(135deg, #718096 0%, #4a5568 100%); transform: translateY(-2px); box-shadow: 0 6px 16px rgba(71, 85, 105, 0.3); }
-        .secondary-btn:active { transform: translateY(1px); box-shadow: 0 2px 6px rgba(71, 85, 105, 0.2); }
+        .secondary-btn { background: linear-gradient(135deg, rgba(100,116,139,0.9) 0%, rgba(71,85,105,0.9) 100%); color: white; box-shadow: 0 4px 12px rgba(71, 85, 105, 0.2); }
+        .secondary-btn:hover { transform: translateY(-2px); box-shadow: 0 6px 16px rgba(71, 85, 105, 0.3); filter: brightness(1.1); }
 
         /* Enlarge sizes */
         @media (min-width: 700px) {
             .container { max-width: 900px; padding: 40px; border-radius: 16px; }
             h2 { font-size: 32px; margin-bottom: 25px; }
-            .history-item { padding: 15px 20px; }
+            .history-card { padding: 20px; margin-bottom: 20px; }
             .history-date { font-size: 14px; }
-            .history-details { font-size: 16px; }
-            .history-payout { font-size: 18px; }
-            .action-btn { padding: 16px; font-size: 18px; margin-top: 15px; border-radius: 10px; }
+            .history-row { font-size: 16px; }
+            .history-payout { font-size: 20px; }
+            .action-btn { padding: 18px; font-size: 18px; margin-top: 15px; border-radius: 10px; }
         }
 
-        /* Dark theme overrides */
-        html.dark-theme body { background-color: #0f172a; }
-        html.dark-theme .container { background-color: #1e293b; box-shadow: 0 10px 30px rgba(0,0,0,0.5); }
-        html.dark-theme h2 { color: #fb7185; }
-        html.dark-theme .history-item { background: #0f172a; border-color: #334155; }
-        html.dark-theme .history-date { color: #94a3b8; }
-        html.dark-theme .history-details { color: #e2e8f0; }
+        /* --- 2. DARK GLASS THEME OVERRIDES --- */
+        html.dark-theme { color-scheme: dark; }
+        
+        html.dark-theme body { background: linear-gradient(135deg, #0f172a 0%, #700b27 50%, #1e293b 100%); }
+        html.dark-theme .container { background: rgba(15, 23, 42, 0.4); border: 1px solid rgba(255, 255, 255, 0.1); box-shadow: 0 10px 32px rgba(0,0,0,0.4); }
+        
+        html.dark-theme h2 { color: #fb7185; text-shadow: 0 1px 3px rgba(0,0,0,0.5); }
+        
+        /* Updated Dark Slate Glass Card */
+        html.dark-theme .history-card { 
+            background: rgba(30, 41, 59, 0.6); 
+            border: 1px solid rgba(4, 120, 87, 0.5); 
+            backdrop-filter: blur(12px); 
+            -webkit-backdrop-filter: blur(12px);
+            box-shadow: 0 4px 16px rgba(0,0,0,0.3); 
+        }
+        
+        html.dark-theme .history-date { color: #94a3b8; border-bottom-color: rgba(255,255,255,0.15); }
+        html.dark-theme .history-row { color: #f8fafc; text-shadow: 0 1px 2px rgba(0,0,0,0.5); }
         html.dark-theme .history-payout { color: #34d399; }
+        html.dark-theme .empty-history { color: #94a3b8; }
     </style>
 </head>
 <body onload="renderHistory()">
@@ -64,7 +96,7 @@
     <div id="historyList" class="history-list">
         </div>
 
-    <button class="action-btn primary-btn" onclick="clearHistory()">Clear History</button>
+    <button class="action-btn danger-btn" onclick="clearHistory()">Clear History</button>
     <a href="index.html" class="action-btn secondary-btn">Return to Calculator</a>
 </div>
 
@@ -73,13 +105,13 @@
         let history = JSON.parse(localStorage.getItem('brandixHistory')) || [];
         let html = '';
         if (history.length === 0) {
-            html = '<p style="text-align:center; color:#94a3b8; font-size: 15px; margin-top: 30px;">No calculation history found.</p>';
+            html = '<div class="empty-history">No calculation history found.</div>';
         } else {
             history.forEach(item => {
                 html += `
-                    <div class="history-item">
+                    <div class="history-card">
                         <div class="history-date">${item.date}</div>
-                        <div class="history-details">Plan: ${item.planned}% | Achieved: ${item.achieved}% | AQL: ${item.aql}</div>
+                        <div class="history-row">Plan: ${item.planned}% | Achieved: ${item.achieved}% | AQL: ${item.aql}</div>
                         <div class="history-payout">Payout: Rs. ${item.payout}</div>
                     </div>
                 `;
@@ -91,7 +123,7 @@
     function clearHistory() {
         if(confirm("Are you sure you want to clear all history?")) {
             localStorage.removeItem('brandixHistory');
-            renderHistory(); // Refresh the list
+            renderHistory(); 
         }
     }
 </script>

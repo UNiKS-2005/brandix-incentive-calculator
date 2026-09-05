@@ -14,7 +14,7 @@ function createWindow () {
   })
 
   // Load the main calculator file
-  win.loadFile('calculator.html')
+  win.loadFile('index.html')
 }
 
 app.whenReady().then(() => {

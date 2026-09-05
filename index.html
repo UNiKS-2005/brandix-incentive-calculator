@@ -12,37 +12,57 @@
     </script>
 
     <style>
-        /* Original default sizes */
-        body { font-family: 'Segoe UI', Arial, sans-serif; background-color: #f4f7f6; padding: 20px; margin: 0; display: flex; justify-content: center; align-items: center; min-height: 100vh; box-sizing: border-box; transition: background-color 0.3s; }
-        .container { background-color: #fff; padding: 25px; border-radius: 12px; box-shadow: 0 10px 25px rgba(0,0,0,0.08); width: 100%; max-width: 450px; position: relative; transition: background-color 0.3s, box-shadow 0.3s; }
+        /* --- 1. LIGHT GLASS THEME (DEFAULT) --- */
+        body { 
+            font-family: 'Segoe UI', Arial, sans-serif; 
+            /* Soft, bright gradient to show off the glass blur */
+            background: linear-gradient(135deg, #f8fafc 0%, #ffe4e6 50%, #e2e8f0 100%); 
+            background-attachment: fixed;
+            padding: 20px; margin: 0; display: flex; justify-content: center; align-items: center; min-height: 100vh; box-sizing: border-box; transition: background 0.5s; 
+        }
+        
+        .container { 
+            background: rgba(255, 255, 255, 0.4); 
+            backdrop-filter: blur(16px); 
+            -webkit-backdrop-filter: blur(16px); 
+            border: 1px solid rgba(255, 255, 255, 0.6); 
+            box-shadow: 0 10px 32px rgba(0,0,0,0.1); 
+            padding: 25px; border-radius: 12px; width: 100%; max-width: 450px; position: relative; transition: all 0.5s; 
+        }
         
         .top-bar { display: flex; justify-content: space-between; align-items: center; margin-bottom: 5px; }
         .brand-logo { height: 40px; width: auto; border-radius: 4px; }
         
         /* Menu Styles */
         .menu-container { position: relative; display: inline-block; }
-        .header-action { background: none; border: none; font-size: 28px; color: #64748b; cursor: pointer; transition: color 0.2s ease; padding: 0 5px; font-weight: bold;}
+        .header-action { background: none; border: none; font-size: 28px; color: #64748b; cursor: pointer; transition: color 0.2s ease; padding: 0 5px; font-weight: bold; text-shadow: 0 1px 2px rgba(255,255,255,0.5);}
         .header-action:hover { color: #c0113f; }
         
-        .dropdown-menu { display: none; position: absolute; right: 0; top: 100%; background-color: #fff; min-width: 160px; box-shadow: 0 8px 16px rgba(0,0,0,0.15); border-radius: 8px; z-index: 10; overflow: hidden; border: 1px solid #e2e8f0; }
+        .dropdown-menu { display: none; position: absolute; right: 0; top: 100%; background: rgba(255, 255, 255, 0.8); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); min-width: 160px; box-shadow: 0 8px 16px rgba(0,0,0,0.15); border-radius: 8px; z-index: 10; overflow: hidden; border: 1px solid rgba(255, 255, 255, 0.6); }
         .dropdown-item { font-family: inherit; color: #334155; padding: 12px 16px; text-decoration: none; display: block; font-size: 14px; font-weight: 600; cursor: pointer; border: none; background: none; width: 100%; text-align: left; transition: background 0.2s; }
-        .dropdown-item:hover { background-color: #f1f5f9; color: #c0113f; }
+        .dropdown-item:hover { background-color: rgba(255, 255, 255, 0.9); color: #c0113f; }
         
         h2 { text-align: center; color: #c0113f; margin-top: 0; font-size: 24px; font-weight: 700; letter-spacing: -0.5px; }
         .form-group { margin-bottom: 15px; }
         label { display: block; margin-bottom: 6px; font-weight: 600; font-size: 14px; color: #334155; }
-        input, select { width: 100%; padding: 12px; border: 1px solid #cbd5e1; border-radius: 8px; box-sizing: border-box; font-size: 15px; transition: all 0.3s ease; outline: none; background-color: #f8fafc; }
-        input:focus, select:focus { border-color: #c0113f; box-shadow: 0 0 0 3px rgba(192, 17, 63, 0.15); background-color: #fff; }
+        
+        input, select { 
+            width: 100%; padding: 12px; border-radius: 8px; box-sizing: border-box; font-size: 15px; transition: all 0.3s ease; outline: none; 
+            background: rgba(255, 255, 255, 0.5); 
+            border: 1px solid rgba(255, 255, 255, 0.8); 
+            color: #334155;
+        }
+        input:focus, select:focus { border-color: #c0113f; box-shadow: 0 0 0 3px rgba(192, 17, 63, 0.15); background: rgba(255, 255, 255, 0.8); }
         
         button.action-btn { width: 100%; padding: 14px; border: none; border-radius: 8px; font-size: 16px; font-weight: 600; letter-spacing: 0.5px; cursor: pointer; transition: all 0.2s ease-in-out; }
-        .primary-btn { background: linear-gradient(135deg, #c0113f 0%, #d81b4b 100%); color: white; margin-top: 15px; box-shadow: 0 4px 12px rgba(192, 17, 63, 0.25); }
-        .primary-btn:hover { background: linear-gradient(135deg, #d81b4b 0%, #e62356 100%); transform: translateY(-2px); box-shadow: 0 6px 16px rgba(192, 17, 63, 0.35); }
+        .primary-btn { background: linear-gradient(135deg, rgba(192,17,63,0.9) 0%, rgba(216,27,75,0.9) 100%); color: white; margin-top: 15px; box-shadow: 0 4px 12px rgba(192, 17, 63, 0.25); backdrop-filter: blur(4px); }
+        .primary-btn:hover { transform: translateY(-2px); box-shadow: 0 6px 16px rgba(192, 17, 63, 0.35); filter: brightness(1.1); }
         .primary-btn:active { transform: translateY(1px); box-shadow: 0 2px 6px rgba(192, 17, 63, 0.2); }
         
-        .result { margin-top: 25px; padding: 15px; background-color: #f0fdf4; border: 1px solid #bbf7d0; border-radius: 8px; transition: background-color 0.3s; }
+        .result { margin-top: 25px; padding: 15px; background: rgba(240, 253, 244, 0.6); border: 1px solid rgba(187, 247, 208, 0.8); border-radius: 8px; transition: background 0.3s; backdrop-filter: blur(8px); }
         .bill-row { display: flex; justify-content: space-between; margin-bottom: 8px; font-size: 14px; color: #334155; }
-        .bill-row.total { font-size: 18px; font-weight: bold; color: #15803d; border-top: 2px solid #bbf7d0; padding-top: 12px; margin-top: 12px; }
-        .bill-row.subtotal { font-weight: bold; border-top: 1px dashed #cbd5e1; padding-top: 10px; margin-top: 10px; }
+        .bill-row.total { font-size: 18px; font-weight: bold; color: #15803d; border-top: 2px solid rgba(187, 247, 208, 0.8); padding-top: 12px; margin-top: 12px; }
+        .bill-row.subtotal { font-weight: bold; border-top: 1px dashed rgba(203, 213, 225, 0.8); padding-top: 10px; margin-top: 10px; }
         .deduction { color: #e11d48; }
         .addition { color: #15803d; }
 
@@ -61,28 +81,46 @@
             .bill-row.total { font-size: 26px; padding-top: 15px; margin-top: 15px; }
         }
 
-        /* Dark theme overrides */
+        /* --- 2. DARK GLASS THEME OVERRIDES --- */
         html.dark-theme { color-scheme: dark; }
         html.dark-theme input[type="number"]::-webkit-inner-spin-button,
         html.dark-theme input[type="number"]::-webkit-outer-spin-button { filter: invert(1) hue-rotate(180deg); opacity: 0.7; }
         
-        html.dark-theme body { background-color: #0f172a; }
-        html.dark-theme .container { background-color: #1e293b; box-shadow: 0 10px 30px rgba(0,0,0,0.5); }
-        html.dark-theme h2 { color: #fb7185; }
-        html.dark-theme label, html.dark-theme .bill-row { color: #e2e8f0; }
-        html.dark-theme input, html.dark-theme select { background-color: #0f172a; border: 1px solid #334155; color: #f8fafc; }
-        html.dark-theme input:focus, html.dark-theme select:focus { border-color: #fb7185; box-shadow: 0 0 0 3px rgba(251, 113, 133, 0.15); }
-        html.dark-theme .header-action { color: #94a3b8; }
-        html.dark-theme .header-action:hover { color: #fb7185; }
-        html.dark-theme .result { background-color: #064e3b; border-color: #047857; }
-        html.dark-theme .bill-row.total, html.dark-theme .addition { color: #34d399; border-top-color: #047857; }
-        html.dark-theme .deduction { color: #fb7185; }
-        html.dark-theme .bill-row.subtotal { border-top-color: #475569; }
+        html.dark-theme body { 
+            /* Deep, dark gradient for dark glass mode */
+            background: linear-gradient(135deg, #0f172a 0%, #700b27 50%, #1e293b 100%); 
+        }
         
-        /* Dark Theme Dropdown Elements */
-        html.dark-theme .dropdown-menu { background-color: #1e293b; border-color: #334155; }
+        html.dark-theme .container { 
+            background: rgba(15, 23, 42, 0.4); 
+            border: 1px solid rgba(255, 255, 255, 0.1); 
+            box-shadow: 0 10px 32px rgba(0,0,0,0.4); 
+        }
+        
+        html.dark-theme h2 { color: #fb7185; text-shadow: 0 1px 3px rgba(0,0,0,0.5); }
+        html.dark-theme label, html.dark-theme .bill-row { color: #f8fafc; text-shadow: 0 1px 2px rgba(0,0,0,0.5); }
+        
+        html.dark-theme input, html.dark-theme select { 
+            background: rgba(0, 0, 0, 0.2); 
+            border: 1px solid rgba(255, 255, 255, 0.15); 
+            color: #ffffff; 
+        }
+        html.dark-theme input:focus, html.dark-theme select:focus { border-color: #fb7185; box-shadow: 0 0 0 3px rgba(251, 113, 133, 0.2); background: rgba(0, 0, 0, 0.4); }
+        
+        html.dark-theme .header-action { color: #cbd5e1; }
+        html.dark-theme .header-action:hover { color: #fb7185; }
+        
+        html.dark-theme .result { 
+            background: rgba(6, 78, 59, 0.3); 
+            border-color: rgba(4, 120, 87, 0.4); 
+        }
+        html.dark-theme .bill-row.total, html.dark-theme .addition { color: #34d399; border-top-color: rgba(4,120,87,0.4); }
+        html.dark-theme .deduction { color: #fb7185; }
+        html.dark-theme .bill-row.subtotal { border-top-color: rgba(255,255,255,0.15); }
+        
+        html.dark-theme .dropdown-menu { background: rgba(30, 41, 59, 0.8); border-color: rgba(255,255,255,0.1); }
         html.dark-theme .dropdown-item { color: #e2e8f0; }
-        html.dark-theme .dropdown-item:hover { background-color: #0f172a; color: #fb7185; }
+        html.dark-theme .dropdown-item:hover { background-color: rgba(0,0,0,0.3); color: #fb7185; }
     </style>
 </head>
 <body>
@@ -112,8 +150,6 @@
         <input type="number" id="planned" value="90" min="0" max="100">
     </div>
     
-    
-
     <div class="form-group">
         <label for="aql">Daily AQL Failures</label>
         <select id="aql">
@@ -201,6 +237,7 @@
         if (history.length > 40) history.pop(); 
         localStorage.setItem('brandixHistory', JSON.stringify(history));
     }
+    
 </script>
 </body>
 </html>
